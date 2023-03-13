@@ -50,6 +50,14 @@ elif(app=='say'):
     agi.verbose('App is %s' % app)
     agi.set_variable('app',response['response']['app'])
     agi.set_variable('text',response['response']['text'])
+elif(app=='collect'):
+    agi.verbose('App is %s' % app)
+    agi.set_variable('app',response['response']['app'])
+    agi.set_variable('text',response['response']['text'])
+    agi.set_variable('action',response['response']['action'])
+    agi.set_variable('timeout',response['response']['timeout'])
+    agi.set_variable('attempts',response['response']['attempts'])
+    agi.set_variable('numdigits',response['response']['numdigits'])
 
 
 
