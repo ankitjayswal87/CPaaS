@@ -1,0 +1,7 @@
+HOST = "localhost"
+DBUSER = "admin"
+DBPASSWORD = "engagely"
+DATABASE = "asterisk"
+SUBSCRIPTION_KEY = "f8e041adcbb54410b492e093dc4b21d1"
+REGION = "centralindia"
+RASA_HOST = "localhost:5005"
