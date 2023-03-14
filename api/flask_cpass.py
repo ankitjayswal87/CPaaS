@@ -6,6 +6,8 @@ app = Flask(__name__)
 def incall_api():
     #res = {"response":{"app":"play","url":"https://api.twilio.com/cowbell.mp3","refresh":"1"}}
     #res = {"response": {"app": "say","refresh": "1","text": "Welcome to my company, we are Voip solution provider, happy to help you"}}
+    some_json = request.get_json()
+    print(some_json)
     res = {"response": {"app": "collect","refresh": "1","text": "Welcome to my company, press one for sales and press two for support","action":"http://localhost:5005/api/process_digits","timeout":"3","attempts":"3","numdigits":"1"}}
     return jsonify(res)
 
@@ -27,7 +29,7 @@ def process_digits_api():
             res = {"response": {"app": "say","refresh": "1","text": "invalid input, please try again"}}
             return jsonify(res)
     else:
-        api_result = {"success":False,"messege":"method not provisioned yet"}
+        api_result = {"response": {"app": "say","refresh": "1","text": "please use the post method in your request"}}
         return(jsonify(api_result))
 
 

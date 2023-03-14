@@ -23,6 +23,8 @@ agi.answer()
 
 #receive data from arguments
 did_number = sys.argv[1]
+call_id = sys.argv[2]
+caller = sys.argv[3]
 
 #just verbose received arguments
 agi.verbose('DID is %s' % sys.argv[1])
@@ -37,7 +39,8 @@ agi.verbose('URL is %s' % str(incoming_url_voice))
 
 #Here call API to get recording type setting
 payload={}
-response = requests.request("POST", str(incoming_url_voice),data=payload)
+call_data = {"call_id":call_id,"caller":caller,"did_number":did_number,"callee":""}
+response = requests.request("POST", str(incoming_url_voice),data=payload,json=call_data)
 
 response = json.loads(response.text)
 app = response['response']['app']
