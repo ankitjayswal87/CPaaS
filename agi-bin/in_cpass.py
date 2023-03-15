@@ -29,17 +29,18 @@ caller = sys.argv[3]
 #just verbose received arguments
 agi.verbose('DID is %s' % sys.argv[1])
 
-#get interface_id from the did_number
+#get account details from the did_number
 mycursor = mydb.cursor()
 mycursor.execute("SELECT * FROM did_number WHERE did_number="+str(did_number))
 myresult = mycursor.fetchall()
 incoming_url_voice = myresult[0][2]
-
+account_id = myresult[0][3]
+agi.set_variable('account_id',account_id)
 agi.verbose('URL is %s' % str(incoming_url_voice))
 
-#Here call API to get recording type setting
+#Here call API to get json app response
 payload={}
-call_data = {"call_id":call_id,"caller":caller,"did_number":did_number,"callee":""}
+call_data = {"account_id":account_id,"call_id":call_id,"caller":caller,"did_number":did_number,"callee":""}
 response = requests.request("POST", str(incoming_url_voice),data=payload,json=call_data)
 
 response = json.loads(response.text)
@@ -61,6 +62,19 @@ elif(app=='collect'):
     agi.set_variable('timeout',response['response']['timeout'])
     agi.set_variable('attempts',response['response']['attempts'])
     agi.set_variable('numdigits',response['response']['numdigits'])
+elif(app=='dial_number'):
+    agi.verbose('App is %s' % app)
+    agi.set_variable('app',response['response']['app'])
+    numbers = response['response']['numbers']
+    numbers=numbers.split(",")
+    dial_string=''
+    trunk_name='kamtrunk'
+    for num in numbers:
+        dial_string+="PJSIP/"+num+"@"+trunk_name+"&"
+    dial_string = dial_string.rstrip('&')
+    agi.set_variable('numbers',dial_string)
+    agi.set_variable('action',response['response']['action'])
+    agi.set_variable('timeout',response['response']['timeout'])
 
 
 

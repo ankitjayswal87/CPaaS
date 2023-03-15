@@ -9,6 +9,7 @@ def incall_api():
     some_json = request.get_json()
     print(some_json)
     res = {"response": {"app": "collect","refresh": "1","text": "Welcome to my company, press one for sales and press two for support","action":"http://localhost:5005/api/process_digits","timeout":"3","attempts":"3","numdigits":"1"}}
+    #res = {"response": {"app": "dial_number","refresh": "1","numbers": "9979272423,8000684001,9427914909","action":"http://localhost:5005/api/dial_number_action","timeout":"60"}}
     return jsonify(res)
 
 @app.route('/api/process_digits',methods=['GET','POST'])
@@ -17,7 +18,8 @@ def process_digits_api():
         some_json = request.get_json()
         digits = some_json['digits']
         if(digits=='1'):
-            res = {"response": {"app": "say","refresh": "1","text": "you have pressed one"}}
+            #res = {"response": {"app": "say","refresh": "1","text": "you have pressed one"}}
+            res = {"response": {"app": "dial_number","refresh": "1","numbers": "9979272423,8000684001,9427914909","action":"http://localhost:5005/api/dial_number_action","timeout":"60"}}
             return jsonify(res)
         elif(digits=='2'):
             res = {"response": {"app": "say","refresh": "1","text": "you have pressed two"}}
@@ -31,6 +33,25 @@ def process_digits_api():
     else:
         api_result = {"response": {"app": "say","refresh": "1","text": "please use the post method in your request"}}
         return(jsonify(api_result))
+
+@app.route('/api/dial_number_action',methods=['GET','POST'])
+def dial_number_action_api():
+    if(request.method=='POST'):
+        some_json = request.get_json()
+        print(some_json)
+        dial_status = some_json['dial_status']
+        if(dial_status=='CHANUNAVAIL'):
+            res = {"response": {"app": "say","refresh": "1","text": "Channel is not available"}}
+            return jsonify(res)
+        elif(dial_status=='NOANSWER'):
+            res = {"response": {"app": "say","refresh": "1","text": "no one is available to answer your call"}}
+            return jsonify(res)
+        elif(dial_status=='BUSY'):
+            res = {"response": {"app": "say","refresh": "1","text": "Channel is busy now"}}
+            return jsonify(res)
+        else:
+            res = {"response": {"app": "say","refresh": "1","text": "there is some technical issue in call dialing"}}
+            return jsonify(res)
 
 
 if __name__ == "__main__":
