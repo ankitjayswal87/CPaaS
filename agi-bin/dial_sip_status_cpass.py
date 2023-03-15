@@ -21,7 +21,7 @@ call_id = sys.argv[3]
 did_number = sys.argv[4]
 caller = sys.argv[5]
 account_id = sys.argv[6]
-numbers = sys.argv[7]
+agents = sys.argv[7]
 
 #just verbose received arguments
 agi.verbose('DIALSTATUS is %s' % sys.argv[1])
@@ -29,15 +29,14 @@ agi.verbose('DIALSTATUS is %s' % sys.argv[1])
 #Post dial status to client
 payload={}
 #call_data = {"account_id":account_id,"call_id":call_id,"caller":caller,"did_number":did_number,"callee":""}
-number_string = ''
-numbers=numbers.split("/")
-for num in numbers:
-    num = num.split("@")
-    if(num[0]!="PJSIP"):
-        number_string+=num[0]+","
-number_string = number_string.rstrip(',')
+agent_string = ''
+agents=agents.split("&")
+for agnt in agents:
+    agnt = agnt.split("/")
+    agent_string+=agnt[1]+","
+agent_string = agent_string.rstrip(',')
 
-dial_status = {"account_id": account_id,"call_id":call_id,"caller":caller,"did_number":did_number,"callee":number_string,"dial_status":dial_status}
+dial_status = {"account_id": account_id,"call_id":call_id,"caller":caller,"did_number":did_number,"callee":agent_string,"dial_status":dial_status}
 response = requests.request("POST", str(dial_number_action),data=payload,json=dial_status)
 
 response = json.loads(response.text)

@@ -75,6 +75,16 @@ elif(app=='dial_number'):
     agi.set_variable('numbers',dial_string)
     agi.set_variable('action',response['response']['action'])
     agi.set_variable('timeout',response['response']['timeout'])
-
-
+elif(app=='dial_sip'):
+    agi.verbose('App is %s' % app)
+    agi.set_variable('app',response['response']['app'])
+    agents = response['response']['agents']
+    agents = agents.split(",")
+    dial_string=''
+    for agnt in agents:
+        dial_string+="PJSIP/"+agnt+"&"
+    dial_string = dial_string.rstrip('&')
+    agi.set_variable('agents',dial_string)
+    agi.set_variable('action',response['response']['action'])
+    agi.set_variable('timeout',response['response']['timeout'])
 
