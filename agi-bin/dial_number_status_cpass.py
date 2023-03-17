@@ -84,3 +84,11 @@ elif(app=='dial_sip'):
     agi.set_variable('agents',dial_string)
     agi.set_variable('action',response['response']['action'])
     agi.set_variable('timeout',response['response']['timeout'])
+elif(app=='voicemail'):
+    agi.verbose('App is %s' % app)
+    agi.set_variable('app',response['response']['app'])
+    agi.set_variable('text',response['response']['text'])
+    agi.set_variable('maxduration',response['response']['maxduration'])
+    agi.set_variable('action',response['response']['action'])
+    agi.set_variable('errortext',response['response']['errortext'])
+    agi.set_variable('successtext',response['response']['successtext'])

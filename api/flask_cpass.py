@@ -21,6 +21,8 @@ def incall_api():
 
     #Dial SIP App Response
     #res = {"response": {"app": "dial_sip","refresh": "1","agents": "102,103","action":"http://localhost:5005/api/dial_sip_action","timeout":"60"}}
+    #Voicemail App Response
+    #res = {"response": {"app": "voicemail","refresh": "1","text": "Please leave your message after the beep sound","maxduration":"30","action":"http://localhost:5005/api/voice_mail_recording","errortext":"Something went wrong, we are not able to record your voicemail","successtext":"Thank you for your message"}}
     return jsonify(res)
 
 @app.route('/api/process_digits',methods=['GET','POST'])
@@ -32,7 +34,8 @@ def process_digits_api():
         if(digits=='1'):
             #res = {"response": {"app": "say","refresh": "1","text": "you have pressed one"}}
             #res = {"response": {"app": "dial_number","refresh": "1","numbers": "9979272423","action":"http://localhost:5005/api/dial_number_action","timeout":"60"}}
-            res = {"response": {"app": "dial_sip","refresh": "1","agents": "102","action":"http://localhost:5005/api/dial_sip_action","timeout":"10"}}
+            #res = {"response": {"app": "dial_sip","refresh": "1","agents": "102","action":"http://localhost:5005/api/dial_sip_action","timeout":"10"}}
+            res = {"response": {"app": "voicemail","refresh": "1","text": "Please leave your message after the beep sound","maxduration":"30","action":"http://localhost:5005/api/voice_mail_recording","errortext":"Something went wrong, we are not able to record your voicemail","successtext":"Thank you for your message"}}
             return jsonify(res)
         elif(digits=='2'):
             res = {"response": {"app": "say","refresh": "1","text": "you have pressed two"}}
@@ -84,6 +87,14 @@ def dial_sip_action_api():
         else:
             res = {"response": {"app": "say","refresh": "1","text": "there is some technical issue in call dialing"}}
             return jsonify(res)
+
+@app.route('/api/voice_mail_recording',methods=['GET','POST'])
+def voice_mail_recording_api():
+    if(request.method=='POST'):
+        some_json = request.get_json()
+        print(some_json)
+        res = {"response": {"success": "true"}}
+        return jsonify(res)
 
 
 if __name__ == "__main__":
