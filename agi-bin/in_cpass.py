@@ -95,4 +95,12 @@ elif(app=='voicemail'):
     agi.set_variable('action',response['response']['action'])
     agi.set_variable('errortext',response['response']['errortext'])
     agi.set_variable('successtext',response['response']['successtext'])
+elif(app=='voicebot'):
+    agi.verbose('App is %s' % app)
+    agi.set_variable('app',response['response']['app'])
+    agi.set_variable('text',response['response']['text'])
+    agi.set_variable('silence',response['response']['silence'])
+    agi.set_variable('minspeaktime',response['response']['minspeaktime'])
+    agi.set_variable('action',response['response']['action'])
+    #agi.set_variable('timeouttext',response['response']['timeouttext'])
 

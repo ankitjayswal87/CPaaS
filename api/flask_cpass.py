@@ -14,7 +14,7 @@ def incall_api():
     print(some_json)
 
     #Collect App Response
-    res = {"response": {"app": "collect","refresh": "1","text": "Welcome to my company, press one for sales and press two for support","action":"http://localhost:5005/api/process_digits","timeout":"3","attempts":"3","numdigits":"1"}}
+    #res = {"response": {"app": "collect","refresh": "1","text": "Welcome to my company, press one for sales and press two for support","action":"http://localhost:5005/api/process_digits","timeout":"3","attempts":"3","numdigits":"1"}}
 
     #Dial Number App Response
     #res = {"response": {"app": "dial_number","refresh": "1","numbers": "9979272423,8000684001,9427914909","action":"http://localhost:5005/api/dial_number_action","timeout":"60"}}
@@ -23,6 +23,7 @@ def incall_api():
     #res = {"response": {"app": "dial_sip","refresh": "1","agents": "102,103","action":"http://localhost:5005/api/dial_sip_action","timeout":"60"}}
     #Voicemail App Response
     #res = {"response": {"app": "voicemail","refresh": "1","text": "Please leave your message after the beep sound","maxduration":"30","action":"http://localhost:5005/api/voice_mail_recording","errortext":"Something went wrong, we are not able to record your voicemail","successtext":"Thank you for your message"}}
+    res = {"response": {"app": "voicebot","refresh": "1","text": "I am voice bot, please let me know how can i help you","silence":"1000","minspeaktime":"500","action":"http://localhost:5005/api/voice_bot_action","timeouttext":"we did not able to hear anything from you"}}
     return jsonify(res)
 
 @app.route('/api/process_digits',methods=['GET','POST'])
@@ -95,6 +96,25 @@ def voice_mail_recording_api():
         print(some_json)
         res = {"response": {"success": "true"}}
         return jsonify(res)
+
+@app.route('/api/voice_bot_action',methods=['GET','POST'])
+def voice_bot_action_api():
+    if(request.method=='POST'):
+        some_json = request.get_json()
+        print(some_json)
+        bot_status = some_json['bot_status']
+        intent = some_json['intent']
+        entity_name = some_json['entity_name']
+        entity_value = some_json['entity_value']
+
+        if(bot_status=='timeout'):
+            res = {"response": {"app": "say","refresh": "1","text": "we did not able to hear anything from you"}}
+            return jsonify(res)
+        else:
+            #process detected intent here
+            data = "intent "+str(intent)+" is detected and process it"
+            res = {"response": {"app": "say","refresh": "1","text": data}}
+            return jsonify(res)
 
 
 if __name__ == "__main__":
