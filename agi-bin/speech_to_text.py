@@ -41,22 +41,39 @@ def get_intent(data):
         data = intent['entities']
         entity_name = data[0]['entity']
         entity_value = data[0]['value']
+        entity_data = {}
+        entity_list = []
+        for dt in data:
+            entity_data['entity']=dt['entity']
+            entity_data['value']=dt['value']
+            entity_list.append(entity_data)
+            entity_data = {}
+        entity_data = json.dumps(entity_list)
     else:
         entity_name = 'none'
         entity_value = 'none'
-    return intent_name+':'+entity_name+':'+entity_value
+        entity_data = 'none'
+    #agi.verbose('The Entities: %s' %data)
+    agi.set_variable('intent',intent_name)
+    agi.set_variable('entity_name',entity_name)
+    agi.set_variable('entity_value',entity_value)
+    agi.set_variable('entities',entity_data)
+    #return intent_name+':'+entity_name+':'+entity_value+':'+str(entity_data)
 
 try:
     data = from_file(file_name)
     agi.verbose('The Detected Data: %s' %data)
-    data = get_intent(data)
-    data = data.split(':')
-    intent_name = data[0]
-    entity_name = data[1]
-    entity_value = data[2]
-    agi.set_variable('intent',intent_name)
-    agi.set_variable('entity_name',entity_name)
-    agi.set_variable('entity_value',entity_value)
+    get_intent(data)
+    #data = get_intent(data)
+    #data = data.split(':')
+    #intent_name = data[0]
+    #entity_name = data[1]
+    #entity_value = data[2]
+    #entities = data[3]
+    #agi.set_variable('intent',intent_name)
+    #agi.set_variable('entity_name',entity_name)
+    #agi.set_variable('entity_value',entity_value)
+    #agi.set_variable('entities',entities)
 except sr.UnknownValueError:
     agi.verbose('Google Speech Recognition could not understand audio')
     agi.set_variable('intent',bot_challenge)

@@ -24,6 +24,7 @@ intent = sys.argv[6]
 entity_name = sys.argv[7]
 entity_value = sys.argv[8]
 action_url = urllib.parse.unquote(sys.argv[9])
+entities = sys.argv[10]
 
 #just verbose received arguments
 agi.verbose('INTENT is %s' % sys.argv[6])
@@ -34,7 +35,7 @@ agi.verbose('ACTION URL is %s' % sys.argv[9])
 #Here call API to get recording type setting
 payload={}
 #post required data here
-call_data = {"account_id":account_id,"call_id":call_id,"caller":caller,"did_number":did_number,"callee":"","bot_status":bot_status,"intent":intent,"entity_name":entity_name,"entity_value":entity_value}
+call_data = {"account_id":account_id,"call_id":call_id,"caller":caller,"did_number":did_number,"callee":"","bot_status":bot_status,"intent":intent,"entity_name":entity_name,"entity_value":entity_value,"entities":entities}
 response = requests.request("POST", str(action_url),data=payload,json=call_data)
 
 response = json.loads(response.text)
@@ -48,10 +49,18 @@ elif(app=='say'):
     agi.verbose('App is %s' % app)
     agi.set_variable('app',response['response']['app'])
     agi.set_variable('text',response['response']['text'])
+    if "voice" in response['response'] and response['response']['voice']!='':
+        agi.set_variable('voice',response['response']['voice'])
+    else:
+        agi.set_variable('voice','en-US-JennyNeural')
 elif(app=='collect'):
     agi.verbose('App is %s' % app)
     agi.set_variable('app',response['response']['app'])
     agi.set_variable('text',response['response']['text'])
+    if "voice" in response['response'] and response['response']['voice']!='':
+        agi.set_variable('voice',response['response']['voice'])
+    else:
+        agi.set_variable('voice','en-US-JennyNeural')
     agi.set_variable('action',response['response']['action'])
     agi.set_variable('timeout',response['response']['timeout'])
     agi.set_variable('attempts',response['response']['attempts'])
@@ -85,6 +94,10 @@ elif(app=='voicemail'):
     agi.verbose('App is %s' % app)
     agi.set_variable('app',response['response']['app'])
     agi.set_variable('text',response['response']['text'])
+    if "voice" in response['response'] and response['response']['voice']!='':
+        agi.set_variable('voice',response['response']['voice'])
+    else:
+        agi.set_variable('voice','en-US-JennyNeural')
     agi.set_variable('maxduration',response['response']['maxduration'])
     agi.set_variable('action',response['response']['action'])
     agi.set_variable('errortext',response['response']['errortext'])
@@ -93,6 +106,10 @@ elif(app=='voicebot'):
     agi.verbose('App is %s' % app)
     agi.set_variable('app',response['response']['app'])
     agi.set_variable('text',response['response']['text'])
+    if "voice" in response['response'] and response['response']['voice']!='':
+        agi.set_variable('voice',response['response']['voice'])
+    else:
+        agi.set_variable('voice','en-US-JennyNeural')
     agi.set_variable('silence',response['response']['silence'])
     agi.set_variable('minspeaktime',response['response']['minspeaktime'])
     agi.set_variable('action',response['response']['action'])
